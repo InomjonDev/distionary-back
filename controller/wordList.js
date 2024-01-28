@@ -3,10 +3,19 @@ const { WordLists, validateWordList } = require("../models/wordListSchema");
 exports.getWordLists = async (req, res) => {
 	try {
 		const wordLists = await WordLists.find().sort({ _id: -1 });
+		const searchValue = req.query.value?.toLowerCase();
+
+		const searchWordLists = wordLists.filter(i =>
+			i.english.toLocaleLowerCase().includes(searchValue)
+		);
 
 		res
 			.status(200)
-			.json({ variant: "success", msg: "All word list", innerData: wordLists });
+			.json({
+				variant: "success",
+				msg: "All word list",
+				innerData: searchWordLists
+			});
 	} catch (error) {
 		console.log(error);
 		res
