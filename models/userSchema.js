@@ -25,6 +25,11 @@ const userSchema = new Schema({
 	password: {
 		type: String,
 		required: true
+	},
+	isAdmin: {
+		type: String,
+		default: false,
+		reduired: false
 	}
 });
 
@@ -37,7 +42,8 @@ const validateUser = body => {
 		username: Joi.string().required(),
 		password: Joi.string().required(),
 		createAt: Joi.date(),
-		image: Joi.array()
+		image: Joi.array(),
+		isAdmin: false
 	});
 	return schema.validate(body);
 };

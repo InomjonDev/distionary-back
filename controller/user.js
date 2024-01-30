@@ -192,3 +192,67 @@ exports.getUserById = async (req, res) => {
 			.json({ variant: "error", msg: "Server error", innerData: null });
 	}
 };
+
+// exports.addIsAdmin = async (req, res) => {
+// 	try {
+// 		const { id } = req.params;
+// 		const { isAdmin } = req.body;
+
+// 		let addedIsAdmin = await Users.updateOne(
+// 			{ id },
+// 			{
+// 				$set: {
+// 					isAdmin
+// 				}
+// 			}
+// 		);
+
+// 		res
+// 			.status(201)
+// 			.json({
+// 				variant: "success",
+// 				msg: "isAdmin is added",
+// 				innerData: addedIsAdmin
+// 			});
+// 	} catch {
+// 		res
+// 			.status(500)
+// 			.json({ variant: "error", msg: "Server error", innerData: null });
+// 	}
+// };
+
+exports.addIsAdmin = async (req, res) => {
+	try {
+		const { id } = req.params;
+
+		// Проверяем, существует ли пользователь с данным ID
+		const existingUser = await Users.findById(id);
+
+		if (!existingUser) {
+			return res.status(404).json({
+				variant: "warning",
+				msg: "User not found",
+				innerData: null
+			});
+		}
+
+		// Добавляем поле isAdmin к существующему пользователю
+		existingUser.isAdmin = true;
+
+		// Сохраняем обновленного пользователя
+		const updatedUser = await existingUser.save();
+
+		res.status(200).json({
+			variant: "success",
+			msg: "isAdmin added to the user",
+			innerData: updatedUser
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			variant: "error",
+			msg: "Server error",
+			innerData: null
+		});
+	}
+};

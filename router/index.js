@@ -7,7 +7,8 @@ const {
 	getUserById,
 	createSignUp,
 	createSignIn,
-	deleteUser
+	deleteUser,
+	addIsAdmin
 } = require("../controller/user");
 const {
 	getWordLists,
@@ -23,6 +24,7 @@ router.get("/get/user/:id", getUserById);
 router.post("/create/sign-up", upload.array("avatarlar"), createSignUp);
 router.post("/create/sign-in", createSignIn);
 router.delete("/delete/user/:id", deleteUser);
+router.post("/user/isAdmin/:id", addIsAdmin);
 
 // WordLists
 router.get("/get/word-lists", getWordLists);
